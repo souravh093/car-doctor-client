@@ -9,8 +9,8 @@ const Header = () => {
   const handleLogout = () => {
     logoutUser()
       .then()
-      .catch(error => console.log(error.message))
-  }
+      .catch((error) => console.log(error.message));
+  };
 
   const navigation = (
     <>
@@ -27,11 +27,14 @@ const Header = () => {
         <Link to="/blog">Blog</Link>
       </li>
       {user?.email ? (
-        <li>
-          <Link>
+        <>
+          <li>
+            <Link to="/bookings">My Booking</Link>
+          </li>
+          <li>
             <button onClick={handleLogout}>Logout</button>
-          </Link>
-        </li>
+          </li>
+        </>
       ) : (
         <li>
           <Link to="/login">Login</Link>
@@ -72,9 +75,7 @@ const Header = () => {
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {navigation}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{navigation}</ul>
       </div>
       <div className="navbar-end">
         <button className="btn btn-outline btn-error">Appointment</button>

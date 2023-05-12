@@ -5,31 +5,41 @@ import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import Checkout from "../Pages/Checkout/Checkout";
-
+import Booking from "../Pages/Booking/Booking";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <Error />,
-        children: [
-            {
-                path: '/',
-                element: <Home />
-            },
-            {
-                path: '/login',
-                element: <Login />
-            },
-            {
-                path: '/register',
-                element: <Register />
-            },
-            {
-                path: '/checkout/:id',
-                element: <Checkout />,
-                loader: ({params}) => fetch(`http://localhost:5000/services/${params.id}`)
-            }
-        ]
-    }
-])
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/checkout/:id",
+        element: <Checkout />,
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/services/${params.id}`),
+      },
+      {
+        path: "/bookings",
+        element: (
+          <PrivateRoute>
+            <Booking />
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
+]);
