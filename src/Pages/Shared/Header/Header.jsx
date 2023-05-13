@@ -9,7 +9,7 @@ const Header = () => {
   const handleLogout = () => {
     logoutUser()
       .then(() => {
-        localStorage.removeItem('car-access-token')
+        
       })
       .catch((error) => console.log(error.message));
   };
