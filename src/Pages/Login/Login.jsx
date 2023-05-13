@@ -1,25 +1,47 @@
 import React, { useContext } from "react";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import loginImg from "../../assets/images/login/login.svg";
 import { AuthContext } from "../../Provider/AuthProvider";
 
 const Login = () => {
-    const {signInUser} = useContext(AuthContext);
-    const handleLogin = (e) => {
-        e.preventDefault();
-        const form = e.target;
-        const email = form.email.value;
-        const password = form.password.value;
-        const rememberMe = form.remember_me.value;
+  const location = useLocation();
+  const navigate = useNavigate();
+  console.log(location)
+  const from = location.state?.from?.pathname || "/";
+  console.log(from)
+  const { signInUser } = useContext(AuthContext);
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    signInUser(email, password)
+      .then((result) => {
+        const loggedUser = result.user;
+        const userEmail = {
+          email: loggedUser.email
+        }
+        console.log(loggedUser, userEmail);
         
-        signInUser(email, password)
-            .then(result => {
-                const loggedUser = result.user;
-                console.log(loggedUser)
-            })
-            .catch(error => console.log(error.message))
-    }
+        fetch('http://localhost:5000/jwt', {
+          method: "POST",
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(userEmail)
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log('jwt response', data);
+          // Warning LocalStorage not the best place to store token it is the second best place
+          localStorage.setItem('car-access-token',  data.token);
+          navigate(from, {replace: true})
+        })
+      })
+      .catch((error) => console.log(error.message));
+  };
   return (
     <div className="grid grid-cols-2 px-20 my-32 min-h-[calc(100vh-300px)]">
       <div className="w-full">
